@@ -1,0 +1,135 @@
+{
+  "cPages": {
+    "lastOpened": {
+      "timestamp": "1:1",
+      "value": "c781ee4c-ce48-574f-9a95-5a0542a3aa75"
+    },
+    "original": {
+      "timestamp": "0:0",
+      "value": -1
+    },
+    "pages": [
+      {
+        "id": "c781ee4c-ce48-574f-9a95-5a0542a3aa75",
+        "idx": {
+          "timestamp": "1:2",
+          "value": "ba"
+        },
+        "template": {
+          "timestamp": "1:1",
+          "value": "Blank"
+        }
+      },
+      {
+        "id": "f255bd52-d8d9-5db2-a9a7-153ee4cfca96",
+        "idx": {
+          "timestamp": "1:2",
+          "value": "bb"
+        },
+        "template": {
+          "timestamp": "1:1",
+          "value": "Blank"
+        }
+      },
+      {
+        "id": "fb2431be-193b-54dc-8989-d26bbc7d5aca",
+        "idx": {
+          "timestamp": "1:2",
+          "value": "bc"
+        },
+        "template": {
+          "timestamp": "1:1",
+          "value": "Blank"
+        }
+      },
+      {
+        "id": "0d7a7eea-8484-5580-aa73-86fae4c66f31",
+        "idx": {
+          "timestamp": "1:2",
+          "value": "bd"
+        },
+        "template": {
+          "timestamp": "1:1",
+          "value": "Blank"
+        }
+      },
+      {
+        "id": "448164e9-a9d3-5d84-afca-c858249a1d21",
+        "idx": {
+          "timestamp": "1:2",
+          "value": "be"
+        },
+        "template": {
+          "timestamp": "1:1",
+          "value": "Blank"
+        }
+      },
+      {
+        "id": "87cae4c8-cf2e-56c5-8e60-f672eb427ce5",
+        "idx": {
+          "timestamp": "1:2",
+          "value": "bf"
+        },
+        "template": {
+          "timestamp": "1:1",
+          "value": "Blank"
+        }
+      },
+      {
+        "id": "67622d0f-951d-54df-892f-01bf10eb3fd0",
+        "idx": {
+          "timestamp": "1:2",
+          "value": "bg"
+        },
+        "template": {
+          "timestamp": "1:1",
+          "value": "Blank"
+        }
+      },
+      {
+        "id": "86898f7a-2da2-5682-8dfa-fed1c4d299ee",
+        "idx": {
+          "timestamp": "1:2",
+          "value": "bh"
+        },
+        "template": {
+          "timestamp": "1:1",
+          "value": "Blank"
+        }
+      },
+      {
+        "id": "53004afa-c3ef-50cc-bf18-66222fbce254",
+        "idx": {
+          "timestamp": "1:2",
+          "value": "bi"
+        },
+        "template": {
+          "timestamp": "1:1",
+          "value": "Blank"
+        }
+      }
+    ],
+    "uuids": [
+      {
+        "first": "9e73b017-7d2d-58a8-bae4-1166f30fa27e",
+        "second": 1
+      }
+    ]
+  },
+  "coverPageNumber": 0,
+  "documentMetadata": {},
+  "extraMetadata": {},
+  "fileType": "notebook",
+  "fontName": "",
+  "formatVersion": 2,
+  "lineHeight": -1,
+  "margins": 125,
+  "orientation": "portrait",
+  "pageCount": 9,
+  "pageTags": [],
+  "sizeInBytes": "0",
+  "tags": [],
+  "textAlignment": "justify",
+  "textScale": 1,
+  "zoomMode": "bestFit"
+}

@@ -1,0 +1,105 @@
+{
+  "docId": "5d1c4e2a-57ac-4b3a-9f00-000000000000",
+  "categories": [
+    {
+      "name": "Dates",
+      "page": 0,
+      "stickers": [
+        "fri",
+        "mon",
+        "sat",
+        "sun",
+        "thu",
+        "tue",
+        "wed"
+      ]
+    },
+    {
+      "name": "Decor",
+      "page": 1,
+      "stickers": [
+        "banner",
+        "divider",
+        "dots",
+        "frame",
+        "ribbon"
+      ]
+    },
+    {
+      "name": "Doodles",
+      "page": 2,
+      "stickers": [
+        "heart",
+        "sparkle",
+        "spiral",
+        "squiggle",
+        "star"
+      ]
+    },
+    {
+      "name": "Labels",
+      "page": 3,
+      "stickers": [
+        "done",
+        "idea",
+        "note",
+        "todo",
+        "urgent"
+      ]
+    },
+    {
+      "name": "Life",
+      "page": 4,
+      "stickers": [
+        "cart",
+        "cup",
+        "gift",
+        "house",
+        "phone"
+      ]
+    },
+    {
+      "name": "Mood",
+      "page": 5,
+      "stickers": [
+        "happy",
+        "love",
+        "meh",
+        "sad",
+        "wow"
+      ]
+    },
+    {
+      "name": "Nature",
+      "page": 6,
+      "stickers": [
+        "cloud",
+        "flower",
+        "leaf",
+        "sun",
+        "tree"
+      ]
+    },
+    {
+      "name": "Plan",
+      "page": 7,
+      "stickers": [
+        "arrow",
+        "checkbox",
+        "checked",
+        "clock",
+        "flag"
+      ]
+    },
+    {
+      "name": "Seasons",
+      "page": 8,
+      "stickers": [
+        "pumpkin",
+        "snowflake",
+        "umbrella",
+        "xmas_tree"
+      ]
+    }
+  ]
+}

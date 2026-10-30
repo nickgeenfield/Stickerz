@@ -1,0 +1,10 @@
+# Build outputs — publish these on Releases, not in git
+*.exe
+*.zip
+*.syso
+*.tar.gz
+Stickerz-*-Setup*
+Stickerz-*.zip
+installer/payload/*.qmd.bak
+.DS_Store
+Thumbs.db

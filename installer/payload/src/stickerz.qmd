@@ -1,0 +1,231 @@
+; Stickerz 1.0 - QML-only sticker go/return buttons for reMarkable Paper Pro 3.28 (no native code).
+; Author: Nick Greenfield
+; Licence: GPL-3.0-or-later (credits include GPL-2.0-or-later research — see README).
+; Document open / page-jump calls follow alefaraci's linkFromSelection (GPL-3.0-only):
+;   research/alefaraci/3.28/linkFromSelection.qmd
+; Overlay INSERT into DocumentView follows the same AFFECT/TRAVERSE as that mod and rm-stickers v3.1.
+; Cross-document return state is stored as primitives on the long-lived root
+; ~&254540341572282132&~ (same object linkFromSelection uses for regCrossPick / regCrossJump),
+; NOT on the DocumentView instance (which is destroyed when the notebook switches).
+; Every hashed token below is copied from mods published for 3.28 (see README "Evidence").
+; Icons are drawn with plain QtQuick Canvas (no new hashes): peeled sticker (open) and
+; left-arrow + lined page (back). Based on Nick's chosen options C and 4.
+
+AFFECT [[8850026134298937527]]
+	TRAVERSE [[8397993708429497603]]
+	LOCATE BEFORE ALL
+	INSERT {
+		/* Primitives on the long-lived root (same pattern as linkFromSelection's regCrossPick). */
+		property string stkBackDoc: ""
+		property int stkBackPage: 0
+		property int stkJump: -1
+		property string stkJumpDoc: ""
+		property int stkLastCat: 0
+		function stkOpenDoc(docId, pageIdx) {
+			try {
+				var d = ~&233694067165438&~.~&8399431778896295215&~(docId);
+				if (!d) return "Library notebook not found - is 'Stickers' in My files?";
+				if (d.~&7712810854541167&~) return "Notebook not downloaded yet";
+				~&254540341572282132&~.stkJumpDoc = docId;
+				~&254540341572282132&~.stkJump = pageIdx;
+				~&254540341572282132&~.~&9497240032101537789&~(d, pageIdx);
+				return "";
+			} catch (e) { return "Could not open: " + e; }
+		}
+		function stkClearBack() {
+			~&254540341572282132&~.stkBackDoc = "";
+			~&254540341572282132&~.stkBackPage = 0;
+		}
+	}
+	END TRAVERSE
+END AFFECT
+
+AFFECT [[11806562588218124596]]
+	TRAVERSE ?#[[6504254477]]
+	LOCATE AFTER ALL
+	INSERT {
+		Item {
+			id: stkLayer
+			anchors.fill: parent
+			z: 99999
+			property string libId: "5d1c4e2a-57ac-4b3a-9f00-000000000000"
+			property var cats: ["Dates", "Decor", "Doodles", "Labels", "Life", "Mood", "Nature", "Plan", "Seasons"]
+			property string msg: ""
+			property string docIdNow: {
+				var d = ~&6504254477&~.~&7712934851008712&~;
+				return (d && d.~&5972374&~) ? String(d.~&5972374&~) : "";
+			}
+			property int pageNow: {
+				try { return ~&6504254477&~.~&6504167078&~; } catch (e) { return 0; }
+			}
+			property bool inLib: docIdNow === libId
+			function openDoc(id, pageIdx) {
+				var err = ~&254540341572282132&~.stkOpenDoc(id, pageIdx);
+				if (err !== "") { msg = err; return false; }
+				return true;
+			}
+			property int jumpTries: 0
+			function tryJump() {
+				var want = ~&254540341572282132&~.stkJump;
+				if (want < 0) return;
+				if (!~&6504254477&~.~&7712934851008712&~) return;
+				if (docIdNow !== ~&254540341572282132&~.stkJumpDoc) { if (++jumpTries > 20) { ~&254540341572282132&~.stkJump = -1; jumpTries = 0; } return; }
+				~&254540341572282132&~.stkJump = -1; jumpTries = 0;
+				if (pageNow === want) return;
+				try { ~&6504254477&~.~&7713405014271992&~(want, ~&14175747548438644067&~.~&10593835380864769165&~.~&7442916920529273295&~); } catch (e) { msg = "Page jump failed: " + e; }
+			}
+			Timer { interval: 250; repeat: true; running: ~&254540341572282132&~.stkJump >= 0; onTriggered: stkLayer.tryJump() }
+			Component.onCompleted: tryJump()
+			function gotoLibrary() {
+				if (inLib) {
+					msg = "Already in Stickers - lasso a sticker, Copy, then tap Back";
+					return;
+				}
+				~&254540341572282132&~.stkBackDoc = docIdNow;
+				~&254540341572282132&~.stkBackPage = pageNow;
+				var pageIdx = ~&254540341572282132&~.stkLastCat;
+				if (pageIdx < 0 || pageIdx >= cats.length) pageIdx = 0;
+				openDoc(libId, pageIdx);
+			}
+			function goBack() {
+				var doc = ~&254540341572282132&~.stkBackDoc;
+				var page = ~&254540341572282132&~.stkBackPage;
+				if (!doc || doc === "") {
+					msg = "No return document - use the X to close Stickers";
+					return;
+				}
+				try { ~&254540341572282132&~.stkLastCat = pageNow; } catch (e) {}
+				~&254540341572282132&~.stkClearBack();
+				openDoc(doc, page);
+			}
+			Timer { id: stkMsgTimer; interval: 3500; running: stkLayer.msg !== ""; onTriggered: stkLayer.msg = "" }
+
+			/* Sticker button: top-right. Icon C — peeled sticker (Canvas, no new hashes). */
+			Rectangle {
+				id: stkGo
+				visible: !stkLayer.inLib
+				width: 88; height: 88; radius: 12
+				anchors.top: parent.top
+				anchors.topMargin: 16
+				anchors.right: parent.right
+				anchors.rightMargin: 120
+				color: "white"; border.color: "black"; border.width: 3
+				Canvas {
+					id: stkGoIcon
+					anchors.fill: parent
+					anchors.margins: 14
+					onPaint: {
+						var ctx = getContext("2d");
+						var w = width, h = height;
+						ctx.clearRect(0, 0, w, h);
+						ctx.strokeStyle = "#000000";
+						ctx.fillStyle = "#000000";
+						ctx.lineWidth = Math.max(2.5, w / 18);
+						ctx.lineJoin = "round";
+						ctx.lineCap = "round";
+						var s = w / 160;
+						function X(x) { return x * s; }
+						function Y(y) { return y * s; }
+						/* body: square with bottom-right corner cut for fold */
+						ctx.beginPath();
+						ctx.moveTo(X(30), Y(30));
+						ctx.lineTo(X(130), Y(30));
+						ctx.lineTo(X(130), Y(95));
+						ctx.lineTo(X(95), Y(130));
+						ctx.lineTo(X(30), Y(130));
+						ctx.closePath();
+						ctx.fillStyle = "#ffffff";
+						ctx.fill();
+						ctx.stroke();
+						/* fold triangle, light grey */
+						ctx.beginPath();
+						ctx.moveTo(X(130), Y(95));
+						ctx.lineTo(X(95), Y(95));
+						ctx.lineTo(X(95), Y(130));
+						ctx.closePath();
+						ctx.fillStyle = "#c8c8c8";
+						ctx.fill();
+						ctx.stroke();
+					}
+					Component.onCompleted: requestPaint()
+					onWidthChanged: requestPaint()
+					onHeightChanged: requestPaint()
+				}
+				MouseArea { anchors.fill: parent; onClicked: stkLayer.gotoLibrary() }
+			}
+
+			/* Back button: same place. Icon 4 — left arrow + lined document page. */
+			Rectangle {
+				id: stkBackBtn
+				visible: stkLayer.inLib
+				width: 88; height: 88; radius: 12
+				anchors.top: parent.top
+				anchors.topMargin: 16
+				anchors.right: parent.right
+				anchors.rightMargin: 120
+				color: "white"; border.color: "black"; border.width: 3
+				Canvas {
+					id: stkBackIcon
+					anchors.fill: parent
+					anchors.margins: 14
+					onPaint: {
+						var ctx = getContext("2d");
+						var w = width, h = height;
+						ctx.clearRect(0, 0, w, h);
+						ctx.strokeStyle = "#000000";
+						ctx.fillStyle = "#ffffff";
+						ctx.lineWidth = Math.max(2.5, w / 18);
+						ctx.lineJoin = "round";
+						ctx.lineCap = "round";
+						var s = w / 160;
+						function X(x) { return x * s; }
+						function Y(y) { return y * s; }
+						/* lined document page on the right */
+						ctx.beginPath();
+						ctx.rect(X(70), Y(25), X(130) - X(70), Y(135) - Y(25));
+						ctx.fill();
+						ctx.stroke();
+						ctx.lineWidth = Math.max(1.5, w / 36);
+						for (var i = 0; i < 5; i++) {
+							var y = 45 + i * 18;
+							ctx.beginPath();
+							ctx.moveTo(X(82), Y(y));
+							ctx.lineTo(X(118), Y(y));
+							ctx.stroke();
+						}
+						/* left arrow pointing at the page */
+						ctx.lineWidth = Math.max(3, w / 14);
+						ctx.beginPath();
+						ctx.moveTo(X(20), Y(80));
+						ctx.lineTo(X(62), Y(80));
+						ctx.stroke();
+						ctx.beginPath();
+						ctx.moveTo(X(20), Y(80));
+						ctx.lineTo(X(40), Y(62));
+						ctx.stroke();
+						ctx.beginPath();
+						ctx.moveTo(X(20), Y(80));
+						ctx.lineTo(X(40), Y(98));
+						ctx.stroke();
+					}
+					Component.onCompleted: requestPaint()
+					onWidthChanged: requestPaint()
+					onHeightChanged: requestPaint()
+				}
+				MouseArea { anchors.fill: parent; onClicked: stkLayer.goBack() }
+			}
+
+			Rectangle {
+				visible: stkLayer.msg !== ""
+				anchors.horizontalCenter: parent.horizontalCenter
+				anchors.top: parent.top
+				anchors.topMargin: 120
+				width: stkMsgText.implicitWidth + 48; height: 72; radius: 12
+				color: "white"; border.color: "black"; border.width: 3
+				z: 1
+				Text { id: stkMsgText; anchors.centerIn: parent; text: stkLayer.msg; font.pixelSize: 28; color: "black" }
+			}
+		}
+	}
+	END TRAVERSE
+END AFFECT
